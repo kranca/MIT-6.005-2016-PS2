@@ -15,10 +15,10 @@ import java.util.Set;
  * 
  * <p>PS2 instructions: you MUST use the provided rep.
  */
-public class ConcreteEdgesGraph implements Graph<String> {
+public class ConcreteEdgesGraph<L> implements Graph<L> {
     
-    private final Set<String> vertices = new HashSet<>();
-    private final List<Edge> edges = new ArrayList<>();
+    private final Set<L> vertices = new HashSet<>();
+    private final List<Edge<L>> edges = new ArrayList<>();
     
     // Abstraction function:
     //   represents a graph, in which vertices might be connected via weighted edges
@@ -37,23 +37,23 @@ public class ConcreteEdgesGraph implements Graph<String> {
 	// checkRep
     private void checkRep() {
 		assert vertices!=null;
-		for (Edge edge:edges) {
+		for (Edge<L> edge:edges) {
 			assert edge.getWeight()>0;
 		}
 	}
     
-    @Override public boolean add(String vertex) {
+    @Override public boolean add(L vertex) {
     	boolean check = vertices.add(vertex);
     	checkRep();
     	return check;
     }
     
-    @Override public int set(String source, String target, int weight) {
+    @Override public int set(L source, L target, int weight) {
         int previousWeight = 0;
         // check if edge is already in edges list
-        for (Edge edge:edges) {
-        	String compareSource = edge.getSource();
-        	String compareTarget = edge.getTarget();
+        for (Edge<L> edge:edges) {
+        	L compareSource = edge.getSource();
+        	L compareTarget = edge.getTarget();
         	// edge is already in edges list
         	if (compareSource==source && compareTarget==target) {
         		previousWeight = edge.getWeight();
@@ -66,7 +66,7 @@ public class ConcreteEdgesGraph implements Graph<String> {
         		// if weight is greater than 0, edge has to be removed and added with updated weight value, since weight is final
         		if (weight>0) {
         			edges.remove(edge);
-        			edges.add(new Edge(source, target, weight));
+        			edges.add(new Edge<L>(source, target, weight));
         			checkRep();
         			return previousWeight;
         		}
@@ -82,17 +82,17 @@ public class ConcreteEdgesGraph implements Graph<String> {
 		}
 		// if weight > 0, add edge
 		if (weight>0) {
-			edges.add(new Edge(source, target, weight));
+			edges.add(new Edge<L>(source, target, weight));
 		}
         // returns 0 for all cases in which a previous weight wasn't available
         checkRep();
         return previousWeight;
     }
     
-    @Override public boolean remove(String vertex) {
-        List<Edge> toRemove = new ArrayList<>();
+    @Override public boolean remove(L vertex) {
+        List<Edge<L>> toRemove = new ArrayList<>();
     	boolean vertexRemoved = false;
-    	for (Edge edge:edges) {
+    	for (Edge<L> edge:edges) {
         	if (edge.getSource().equals(vertex) || edge.getTarget().equals(vertex)) {
         		toRemove.add(edge);
         	}
@@ -104,16 +104,16 @@ public class ConcreteEdgesGraph implements Graph<String> {
 		return vertexRemoved;
     }
     
-    @Override public Set<String> vertices() {
+    @Override public Set<L> vertices() {
         // defensive copy of Set
     	//System.out.println(vertices);
-    	return new HashSet<String>(vertices);
+    	return new HashSet<L>(vertices);
     }
     
-    @Override public Map<String, Integer> sources(String target) {
-        Map<String, Integer> sourcesMap = new TreeMap<String, Integer>();
+    @Override public Map<L, Integer> sources(L target) {
+        Map<L, Integer> sourcesMap = new TreeMap<L, Integer>();
         //System.out.println(edges);
-        for (Edge edge:edges) {
+        for (Edge<L> edge:edges) {
         	if (edge.getTarget().equals(target)) {
         		sourcesMap.put(edge.getSource(), edge.getWeight());
         	}
@@ -122,9 +122,9 @@ public class ConcreteEdgesGraph implements Graph<String> {
         return sourcesMap;
     }
     
-    @Override public Map<String, Integer> targets(String source) {
-    	Map<String, Integer> targetsMap = new TreeMap<String, Integer>();
-        for (Edge edge:edges) {
+    @Override public Map<L, Integer> targets(L source) {
+    	Map<L, Integer> targetsMap = new TreeMap<L, Integer>();
+        for (Edge<L> edge:edges) {
         	if (edge.getSource().equals(source)) {
         		targetsMap.put(edge.getTarget(), edge.getWeight());
         	}
@@ -132,18 +132,11 @@ public class ConcreteEdgesGraph implements Graph<String> {
         return targetsMap;
     }
     
-    // TODO toString()
+    // toString()
     @Override public String toString() {
     	String stringRep = "";
-    	//for (String vertex:vertices) {
-    		//Map<String, Integer> targets = targets(vertex);
-    		//for (String key:targets.keySet()) {
-    			//stringRep = stringRep + vertex + " -> " + key + ": " + targets.get(key) + "\n";
-    		//}
-    	//}
-    	//checkRep();
     	
-    	for (Edge edge:edges) {
+    	for (Edge<L> edge:edges) {
     		stringRep += edge.toString();
     	}
     	return stringRep;
@@ -160,11 +153,11 @@ public class ConcreteEdgesGraph implements Graph<String> {
  * <p>PS2 instructions: the specification and implementation of this class is
  * up to you.
  */
-class Edge {
+class Edge<L> {
     
     private final Integer weight;
-    private final String source;
-    private final String target;
+    private final L source;
+    private final L target;
     
     // Abstraction function:
     //   Represents the edge between one source vertex and one target vertex in a graph, which must have a positive weight
@@ -182,7 +175,7 @@ class Edge {
      * @param target is the target to which the edge is directed
      * @param weight is the weight of the edge
      */
-    public Edge(String source, String target, Integer weight) {
+    public Edge(L source, L target, Integer weight) {
     	this.source = source;
     	this.target = target;
     	this.weight = weight;
@@ -201,19 +194,19 @@ class Edge {
 		return weight;
 	}
 	
-	public String getSource() {
+	public L getSource() {
 		return source;
 	}
 	
-	public String getTarget() {
+	public L getTarget() {
 		return target;
 	}
     
-    // TODO toString()
+    // toString()
 	@Override public String toString() {
 		String stringRep = "";
-		String edgeSource = getSource();
-		String edgeTarget = getTarget();
+		String edgeSource = getSource().toString();
+		String edgeTarget = getTarget().toString();
 		String edgeWeight = getWeight().toString();
 		
 		stringRep = stringRep + edgeSource + " -> " + edgeTarget + ": " + edgeWeight + "\n";

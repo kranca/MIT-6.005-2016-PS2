@@ -27,7 +27,7 @@ public class ConcreteVerticesGraphTest extends GraphInstanceTest {
      * Provide a ConcreteVerticesGraph for tests in GraphInstanceTest.
      */
     @Override public Graph<String> emptyInstance() {
-        return new ConcreteVerticesGraph();
+        return new ConcreteVerticesGraph<String>();
     }
     
     /*
@@ -73,7 +73,7 @@ public class ConcreteVerticesGraphTest extends GraphInstanceTest {
     @Test
     public void testCreatorAndGetName() {
     	String name = "v1";
-    	Vertex test = new Vertex(name);
+    	Vertex<String> test = new Vertex<>(name);
     	assertTrue("Expected Vertex name to be 'v1'", test.getName().equals(name));
     	assertTrue("Expected empty set of directed edges from vertice v1", test.getDirectedEdges().isEmpty());
     }
@@ -82,8 +82,8 @@ public class ConcreteVerticesGraphTest extends GraphInstanceTest {
     public void testGetWeight() {
     	String name1 = "v1";
     	String name2 = "v2";
-    	Vertex test1 = new Vertex(name1);
-    	Vertex test2 = new Vertex(name2);
+    	Vertex<String> test1 = new Vertex<>(name1);
+    	Vertex<String> test2 = new Vertex<>(name2);
     	test1.setEdgeTo(test2, 10);
     	assertTrue("Expected weight with value 10", test1.getWeight(test2).equals(10));
     }
@@ -93,9 +93,9 @@ public class ConcreteVerticesGraphTest extends GraphInstanceTest {
     	String name1 = "v1";
     	String name2 = "v2";
     	String name3 = "v3";
-    	Vertex test1 = new Vertex(name1);
-    	Vertex test2 = new Vertex(name2);
-    	Vertex test3 = new Vertex(name3);
+    	Vertex<String> test1 = new Vertex<>(name1);
+    	Vertex<String> test2 = new Vertex<>(name2);
+    	Vertex<String> test3 = new Vertex<>(name3);
     	test1.setEdgeTo(test2, 10);
     	test1.setEdgeTo(test3, 20);
     	String expected = name1 + " -> " + name2 + ": 10\n"
@@ -109,12 +109,12 @@ public class ConcreteVerticesGraphTest extends GraphInstanceTest {
     	String name1 = "v1";
     	String name2 = "v2";
     	String name3 = "v3";
-    	Vertex test1 = new Vertex(name1);
-    	Vertex test2 = new Vertex(name2);
-    	Vertex test3 = new Vertex(name3);
+    	Vertex<String> test1 = new Vertex<>(name1);
+    	Vertex<String> test2 = new Vertex<>(name2);
+    	Vertex<String> test3 = new Vertex<>(name3);
     	test1.setEdgeTo(test2, 10);
     	test1.setEdgeTo(test3, 20);
-    	Set<Vertex> testSet = new HashSet<>();
+    	Set<Vertex<String>> testSet = new HashSet<>();
     	testSet.add(test2);
     	testSet.add(test3);
     	assertTrue("Expected Vertex 'v2' and 'v3' to be contained in Set directedEdges", test1.getDirectedEdges().containsAll(testSet));

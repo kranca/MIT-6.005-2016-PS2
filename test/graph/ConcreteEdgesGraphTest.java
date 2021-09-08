@@ -25,7 +25,7 @@ public class ConcreteEdgesGraphTest extends GraphInstanceTest {
      * Provide a ConcreteEdgesGraph for tests in GraphInstanceTest.
      */
     @Override public Graph<String> emptyInstance() {
-        return new ConcreteEdgesGraph();
+        return new ConcreteEdgesGraph<String>();
     }
     
     /*
@@ -79,7 +79,7 @@ public class ConcreteEdgesGraphTest extends GraphInstanceTest {
     
     @Test
     public void testEdgeCreator() {
-    	Edge test = new Edge(vertex1, vertex2, 50);
+    	Edge<String> test = new Edge<String>(vertex1, vertex2, 50);
     	String expected = "";
     	expected = expected + vertex1 + " -> " + vertex2 + ": " + "50" + "\n";
     	assertTrue("Expected Edge source to equal vertex1", test.getSource().equals(vertex1));
